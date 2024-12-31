@@ -1,0 +1,161 @@
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Your existing CSS */
+:root {
+  font-family: "Geist", sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #fff;
+  background-color: #000;
+  overflow-x: hidden;
+}
+
+body {
+  display: flex;
+}
+
+main {
+  width: 100%;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.carousel-column {
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Define upward scroll animation */
+@keyframes scrollUp {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+/* Define downward scroll animation */
+@keyframes scrollDown {
+  0% {
+    transform: translateY(-50%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Apply animations to columns */
+.carousel-column:nth-child(odd) .scroll-content {
+  animation-name: scrollUp;
+}
+
+.carousel-column:nth-child(even) .scroll-content {
+  animation-name: scrollDown;
+}
+
+/* Ensure content is duplicated in your HTML for seamless scroll */
+.scroll-content {
+  /* Add this to ensure cards are visible initially */
+  transform: translateY(0);
+}
+
+/* Adjust delays for smoother appearance */
+.carousel-column:nth-child(2) .scroll-content {
+  animation-delay: -10s;
+}
+.carousel-column:nth-child(3) .scroll-content {
+  animation-delay: -5s;
+}
+.carousel-column:nth-child(4) .scroll-content {
+  animation-delay: -15s;
+}
+.carousel-column:nth-child(5) .scroll-content {
+  animation-delay: -20s;
+}
+
+.carousel-column .scroll-content {
+  animation-duration: 40s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.card {
+  height: 150px;
+  display: flex;
+  background-color: #090909;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+.card::after {
+  content: "";
+  position: absolute;
+  bottom: -20px;
+  left: -20px;
+  width: calc(100% + 40px);
+  height: 120px;
+  background: linear-gradient(
+    125deg,
+    rgba(59, 109, 11, 0.4),
+    rgba(196, 90, 133, 0.7),
+    rgba(50, 92, 118, 0.7),
+    rgba(73, 24, 46, 0.7),
+    rgba(184, 116, 15, 0.7)
+  );
+  background-size: 500% 500%;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  filter: blur(15px);
+  animation: gradientFlow 15s ease infinite;
+  z-index: 1; /* Add this */
+}
+
+/* Add relative positioning and z-index to the card content */
+.card > * {
+  position: relative;
+  z-index: 2;
+}
+
+.card:hover::after {
+  opacity: 0.7;
+}
