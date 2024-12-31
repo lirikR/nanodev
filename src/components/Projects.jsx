@@ -1,36 +1,84 @@
-import React from "react";
-import { reviewColumns as columns } from "../data/reviewData";
+import React, { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+
+const projectsData = [
+  {
+    id: 1,
+    name: "Project Alpha",
+    description: "A revolutionary web application",
+    image: "https://picsum.photos/500/300?random=1",
+  },
+  {
+    id: 2,
+    name: "Project Beta",
+    description: "Next-gen mobile experience",
+    image: "https://picsum.photos/500/300?random=2",
+  },
+  {
+    id: 3,
+    name: "Project Gamma",
+    description: "AI-powered analytics platform",
+    image: "https://picsum.photos/500/300?random=3",
+  },
+  {
+    id: 4,
+    name: "Project Delta",
+    description: "Cloud infrastructure solution",
+    image: "https://picsum.photos/500/300?random=4",
+  },
+  {
+    id: 5,
+    name: "Project Epsilon",
+    description: "Enterprise security system",
+    image: "https://picsum.photos/500/300?random=5",
+  },
+];
 
 const Projects = () => {
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"],
+  });
+
   return (
-    <div className="w-screen mt-40">
-      <div className="flex flex-col items-center justify-center h-screen w-full">
-        <h1 className="text-4xl font-medium mt-10 mb-1">
-          {`<We let our work, do the talking for us/>`}
-        </h1>
-        <h1 className="text-zinc-300 text-lg font-medium mb-12">
-          Companies all over the world trust us with their projects.
-        </h1>
-        <div className="grid grid-cols-5 gap-4 h-screen w-full px-8 [mask-image:linear-gradient(to_bottom,transparent_0%,black_10%,black_90%,transparent_100%)]">
-          {columns.map((column, columnIndex) => (
-            <div key={columnIndex} className="carousel-column">
-              <div className="scroll-content">
-                {[...column, ...column].map((review, cardIndex) => (
-                  <div
-                    key={cardIndex}
-                    className="card bg-black-950 p-8 rounded-lg mb-4 border border-zinc-700 text-white min-h-[200px] flex flex-col"
-                  >
-                    <p className="text-sm mb-4 text-left">{review.text}</p>
-                    <div className="w-full mt-auto text-left">
-                      <p className="text-sm font-medium">{review.name}</p>
-                      <p className="text-xs text-zinc-400">{review.company}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
+    <div ref={containerRef} className="min-h-[300vh] relative py-40 px-4">
+      <h2 className="text-4xl font-medium text-center mb-32">Projects</h2>
+      <div className="max-w-6xl mx-auto">
+        {projectsData.map((project, index) => {
+          const projectRef = useRef(null);
+          const { scrollYProgress: projectScroll } = useScroll({
+            target: projectRef,
+            offset: ["start end", "end start"], // Changed to full viewport range
+          });
+
+          const x = useTransform(projectScroll, [0, 1], [-200, 200]); // Full width movement
+          const opacity = useTransform(
+            projectScroll,
+            [0, 0.3, 0.7, 1],
+            [0, 1, 1, 0]
+          ); // Fade in/out
+
+          return (
+            <motion.div
+              ref={projectRef}
+              key={project.id}
+              className="mb-96 p-8 bg-white/5 rounded-lg"
+              style={{
+                x,
+                opacity,
+              }}
+            >
+              <h3 className="text-2xl font-medium mb-4">{project.name}</h3>
+              <img
+                src={project.image}
+                alt={project.name}
+                className="w-full h-64 object-cover rounded-lg mb-4"
+              />
+              <p className="text-gray-300">{project.description}</p>
+            </motion.div>
+          );
+        })}
       </div>
     </div>
   );

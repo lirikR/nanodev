@@ -14,8 +14,14 @@
   overflow-x: hidden;
 }
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px; /* This helps with the fixed navbar */
+}
+
 body {
   display: flex;
+  -webkit-overflow-scrolling: touch;
 }
 
 main {
